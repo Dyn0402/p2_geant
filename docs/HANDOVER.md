@@ -8,6 +8,8 @@ This is the document to read first. `HANDOFF.md` and `SIM_CAMPAIGN_BRIEF.md`
 are from August 2026 and are kept for history only: their status sections
 are out of date. The rules for working in this repo are in `CLAUDE.md` at the
 top level. Read them too, because they are the reason the results below can be trusted.
+To install and run everything on your own machine (no CERN account needed),
+see `docs/LOCAL_SETUP.md`.
 
 ---
 
@@ -51,6 +53,8 @@ Geant4 (mm_sim, p2 mode)     ->  Stage B (stage_b/)            ->  VMM emulator 
 | VMM emulator | Runs standalone. **It has not yet been run on Stage B output from the Heed batch.** |
 
 ## 3. Production samples
+
+Paths are on EOS. Locally they are under `$P2_DATA` (`docs/LOCAL_SETUP.md`).
 
 | batch | physics | where | use? |
 |---|---|---|---|
@@ -121,9 +125,10 @@ gain cannot tell you the gap size.
 
 **Geometry DAG 12548862 has finished but has NOT been compared to data.** It covers gaps 120/135/165 µm,
 wire Ø16/20 µm, spacings 66/73 µm, a 415 V cosmic variant and 430/470 V ×
-4 gaps, giving 121 transparency results and 33 gain results. The transparency outputs are still only on
-lxplus in `~/P2_Geant_Garfield/condor_transp/geom_<tag>_E<E>_<gas>.out`
-(`TRANSPARENCY` lines). Copy them into `docs/results/` first.
+4 gaps, giving 121 transparency results and 33 gain results. The transparency outputs are the
+`TRANSPARENCY` lines in `condor_transp/geom_<tag>_E<E>_<gas>.out`, which are in the data bundle as
+`$P2_DATA/condor_transp/` (from `~/P2_Geant_Garfield/condor_transp` on lxplus). Copy the numbers into
+`docs/results/` first.
 
 ## 6. To-do list, in priority order
 
@@ -189,9 +194,16 @@ Matthieu's MHz rates.
 - **COMSOL mesh cell:** from a Saclay Micromegas colleague (Alexandra can introduce you). The file is
   `/eos/user/a/akallits/p2_sim/comsol/` (850 MB). Use the `h2mm_sweep_gap150` outputs. COMSOL re-meshes on every solve, so you need one solve per voltage.
 
-## 8. Running things on lxplus
+## 8. Running things
 
-`docs/RUNBOOK.md` covers building and submitting Geant4 jobs. In addition:
+**Without a CERN account, follow `docs/LOCAL_SETUP.md`.** It covers the conda environment,
+the data bundle (`$P2_DATA` stands in for `/eos/user/a/akallits/p2_sim`
+everywhere in this file), `submit_condor_p2.py --local` in place of HTCondor,
+and a check that your machine reproduces the lxplus numbers. The only thing
+you cannot do locally is a new COMSOL field solve, which needs a licence.
+
+The rest of this section is for whoever runs on lxplus. `docs/RUNBOOK.md`
+covers building and submitting Geant4 jobs. In addition:
 
 - Work from a **clean git clone** so RunMeta records a real commit. Build it with
   `scripts/setup_lxplus.sh` + `scripts/build.sh`.
@@ -226,13 +238,12 @@ Matthieu's MHz rates.
 
 1. Read this file, `CLAUDE.md`, `docs/P2_GEOMETRY.md` and `docs/results/mesh/README.md`.
    Then go through the logbook slides.
-2. Get lxplus access and EOS read access to `/eos/user/a/akallits/p2_sim`
-   (ask Alexandra), build `mm_sim` and Garfield.
-3. **Reproduce one known result before changing anything.** Suggested results:
-   - the Nikolopoulos transparency validation, or
-   - a single `rnd2026_heed` point compared with `docs/results/rnd2026_heed/heed_vs_legacy.csv`.
-
-   This tests the setup and this document. Fix any step here that was wrong.
+2. Install locally and download the data bundle (`docs/LOCAL_SETUP.md` §1–2;
+   Alexandra sends the CERNBox link).
+3. **Reproduce known results before changing anything**: the checks in
+   `docs/LOCAL_SETUP.md` §4. They rerun a published transparency point and one
+   `rnd2026_heed` point, and compare them with the lxplus results. This tests your setup and
+   these documents. Fix any step that was wrong.
 4. Then start on to-do item 1 (geometry vs data).
 
 ## 11. People

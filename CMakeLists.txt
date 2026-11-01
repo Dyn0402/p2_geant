@@ -59,11 +59,19 @@ file(GLOB SOURCES ${PROJECT_SOURCE_DIR}/src/*.cc)
 # Geant4 11.2.1, ROOT 6.32.02, commit d3bbb29); its Heed was checked against
 # the pinned standalone build (same spectra, docs/results/heed/pai).
 set(P2_GARFIELD_DIR "$ENV{GARFIELD_INSTALL}" CACHE PATH "Garfield++ install prefix")
+# The environment wins over the cache: a first build made before Garfield was
+# installed must not keep --heed disabled on every later build.
+if(DEFINED ENV{GARFIELD_INSTALL} AND NOT "$ENV{GARFIELD_INSTALL}" STREQUAL "")
+    set(P2_GARFIELD_DIR "$ENV{GARFIELD_INSTALL}" CACHE PATH "Garfield++ install prefix" FORCE)
+endif()
 if(NOT P2_GARFIELD_DIR)
     set(P2_GARFIELD_DIR "/cvmfs/sft.cern.ch/lcg/releases/LCG_106/Garfield++/HEAD/x86_64-el9-gcc13-opt")
 endif()
 find_path(GARFIELD_INCLUDE_DIR Garfield/TrackHeed.hh HINTS ${P2_GARFIELD_DIR}/include NO_DEFAULT_PATH)
 find_library(GARFIELD_LIBRARY Garfield HINTS ${P2_GARFIELD_DIR}/lib64 ${P2_GARFIELD_DIR}/lib NO_DEFAULT_PATH)
+# Recent Garfield (e.g. the 927e5c21 pin) puts Random::draw in a separate
+# libGarfieldRandom; LCG_106's Garfield has no such library.
+find_library(GARFIELD_RANDOM_LIBRARY GarfieldRandom HINTS ${P2_GARFIELD_DIR}/lib64 ${P2_GARFIELD_DIR}/lib NO_DEFAULT_PATH)
 set(P2_WITH_GARFIELD OFF)
 if(GARFIELD_INCLUDE_DIR AND GARFIELD_LIBRARY AND ROOT_FOUND)
     set(P2_WITH_GARFIELD ON)
@@ -92,6 +100,9 @@ endif()
 if(P2_WITH_GARFIELD)
     target_include_directories(mm_sim PRIVATE ${GARFIELD_INCLUDE_DIR})
     target_link_libraries(mm_sim ${GARFIELD_LIBRARY})
+    if(GARFIELD_RANDOM_LIBRARY)
+        target_link_libraries(mm_sim ${GARFIELD_RANDOM_LIBRARY})
+    endif()
     get_filename_component(_garf_libdir ${GARFIELD_LIBRARY} DIRECTORY)
     set_target_properties(mm_sim PROPERTIES BUILD_RPATH "${_garf_libdir}" INSTALL_RPATH "${_garf_libdir}")
     target_compile_definitions(mm_sim PRIVATE P2_WITH_GARFIELD

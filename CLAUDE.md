@@ -54,10 +54,13 @@ people and to AI assistants working in this repo.
 
 ## Practicalities
 
+- Local setup (no CERN account): `docs/LOCAL_SETUP.md`. `$P2_DATA` stands in for
+  `/eos/user/a/akallits/p2_sim` in every path. Use `submit_condor_p2.py --local` instead of
+  HTCondor. Before trusting a new machine, run the checks in its §4.
 - Production runs come from a clean git checkout, so that RunMeta records the commit.
 - Compiled Garfield programs only; ROOT 6.38 cling cannot JIT them.
 - Don't edit or pull sources that queued HTCondor jobs recompile from.
-- Large outputs go on EOS. Results that back a claim get copied into `docs/results/<topic>/`
+- Large outputs go under `$P2_DATA` (EOS on lxplus), never in git. Results that back a claim get copied into `docs/results/<topic>/`
   with a README saying what produced them (script, commit, cluster id).
 - Add a dated entry to the logbook (`docs/logbook/project/`) for each completed step.
 - Slides: white background, black text, Arial, title + bullets, at most one figure.

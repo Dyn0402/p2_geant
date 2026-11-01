@@ -114,6 +114,8 @@ if [ "$_mode" = "build" ]; then
         source "$P2_LCG_VIEW/setup.sh"
     else
         echo "!!  No LCG view; relying on whatever ROOT/cmake are already set up."
+        # conda env (docs/LOCAL_SETUP.md): its libraries before the system's
+        [ -n "$CONDA_PREFIX" ] && export CMAKE_PREFIX_PATH="$CONDA_PREFIX${CMAKE_PREFIX_PATH:+:$CMAKE_PREFIX_PATH}"
     fi
     mkdir -p "$(dirname "$_src")"
     if [ ! -d "$_src/.git" ]; then

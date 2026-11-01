@@ -32,10 +32,18 @@ Usage:
     python3 scripts/submit_condor_p2.py --scan angle --gases ArIso NeIso9010
     python3 scripts/submit_condor_p2.py --scan rnd2026 --outdir /eos/user/a/akallits/p2_sim/rnd2026_heed
         (--physics heed is the default since 2026-10-16; --physics legacy = old)
+
+Without HTCondor (your own machine, docs/LOCAL_SETUP.md): --local N runs the
+same jobs, with the same wrapper and manifest, on N local processes.
+--only and --scale pick a subset and shrink it to laptop size:
+    python3 scripts/submit_condor_p2.py --scan rnd2026 --local 4 \
+        --only ArIso_3p964mm_electron --scale 0.1 --outdir $P2_DATA/my_rnd2026
 """
 
 import argparse
+import concurrent.futures
 import csv
+import time
 import json
 import os
 import random
@@ -153,6 +161,14 @@ def parse_args():
     p.add_argument("--physics", choices=sorted(PHYSICS), default="heed",
                    help="Physics preset passed to mm_sim (default: heed; "
                         "legacy = the pre-2026-10-16 settings)")
+    p.add_argument("--local", type=int, metavar="N", default=0,
+                   help="Run the jobs here on N parallel processes instead of "
+                        "submitting to HTCondor (default setup: setup_local.sh)")
+    p.add_argument("--only", nargs="+", default=None, metavar="SUBSTR",
+                   help="Keep only jobs whose tag contains one of these strings")
+    p.add_argument("--scale", type=float, default=1.0,
+                   help="Multiply every job's event count (e.g. 0.01 for a "
+                        "quick local test; RunMeta records the real count)")
     return p.parse_args()
 
 
@@ -399,7 +415,8 @@ def main():
     if not exe:
         sys.exit("ERROR: mm_sim not found. Build it, or pass --exe.")
 
-    setup = args.setup or str((Path(__file__).parent / "setup_lxplus.sh").resolve())
+    default_setup = "setup_local.sh" if args.local else "setup_lxplus.sh"
+    setup = args.setup or str((Path(__file__).parent / default_setup).resolve())
     if not Path(setup).is_file():
         sys.exit(f"ERROR: setup script not found: {setup}")
 
@@ -412,6 +429,11 @@ def main():
                      f"Run `{exe} --list-gases` for the current table.")
 
     jobs = build_jobs(args)
+    if args.only:
+        jobs = [j for j in jobs
+                if any(o in make_tag(*j[:5]) for o in args.only)]
+    if args.scale != 1.0:
+        jobs = [j[:5] + (max(1, int(round(j[5] * args.scale))),) for j in jobs]
     if not jobs:
         sys.exit("ERROR: the requested scan expanded to zero jobs.")
 
@@ -451,8 +473,41 @@ def main():
             print(f"    ... and {len(rows)-10} more")
         return
 
+    if args.local:
+        run_local(rows, wrapper, job_dir, args.local, args.beam_spread)
+        print(f"\n  Then:  python3 scripts/collect_results.py --indir {outdir}")
+        return
+
     subprocess.run(["condor_submit", str(submit_file)], check=True)
     print(f"\n  Submitted. Then:  python3 scripts/collect_results.py --indir {outdir}")
+
+
+def run_local(rows, wrapper, job_dir, workers, spread):
+    """HTCondor stand-in: the same wrapper and arguments, N processes."""
+    log_dir = job_dir / "logs"
+    log_dir.mkdir(exist_ok=True, parents=True)
+
+    def one(r):
+        argv = [str(wrapper), r["gas"], r["particle"], f"{r['energy_MeV']:.10g}",
+                str(r["nevents"]), r["outfile"], str(r["seed"]),
+                f"{r['drift_gap_mm']:g}", f"{r['theta_deg']:g}", f"{spread:g}",
+                str(r["skip_empty"])]
+        t0 = time.time()
+        with open(log_dir / f"{r['tag']}.out", "w") as out, \
+             open(log_dir / f"{r['tag']}.err", "w") as err:
+            rc = subprocess.run(argv, stdout=out, stderr=err).returncode
+        return r["tag"], rc, time.time() - t0
+
+    print(f"\n  Running {len(rows)} job(s) locally on {workers} process(es); "
+          f"logs in {log_dir}")
+    failed = []
+    with concurrent.futures.ThreadPoolExecutor(max_workers=workers) as ex:
+        for tag, rc, dt in ex.map(one, rows):
+            print(f"    [{'ok' if rc == 0 else f'FAILED rc={rc}'}] {tag}  ({dt:.0f} s)")
+            if rc:
+                failed.append(tag)
+    if failed:
+        sys.exit(f"  {len(failed)} job(s) failed; see {log_dir}/<tag>.err")
 
 
 if __name__ == "__main__":

@@ -1,0 +1,29 @@
+# Local (non-CERN) environment for the P2 simulation: Linux or macOS.
+#
+#   conda env create -f environment.yml      (or mamba / micromamba)
+#   conda activate p2sim
+#   source scripts/setup_local.sh
+#
+# Production on lxplus used Geant4 11.2.1 + ROOT 6.32 (LCG_106).
+# conda-forge has 11.2.2 (a bug-fix release of the same series), which is
+# checked against the lxplus reference in docs/LOCAL_SETUP.md, section "Check".
+name: p2sim
+channels:
+  - conda-forge
+dependencies:
+  - python=3.11
+  - geant4=11.2.2
+  - expat                 # headers for Geant4's CMake config (else it finds an old system one)
+  - root=6.32
+  - cmake>=3.20
+  - make
+  - cxx-compiler
+  - fortran-compiler      # Garfield++ builds Magboltz (Fortran)
+  - git
+  - gsl                   # Garfield++
+  - numpy
+  - scipy
+  - pandas
+  - matplotlib
+  - uproot
+  - awkward
