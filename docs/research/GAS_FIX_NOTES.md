@@ -2,7 +2,7 @@
 
 **Written:** 2026-08-05. Status: **fixed, verified in Geant4, and the
 affected results re-measured.** Code: `DetectorConstruction.cc`
-(`idealRho` + `makeMixV`). Campaign context: `../SIM_CAMPAIGN_PLAN.md` §3
+(`idealRho` + `makeMixV`). Campaign context: `../archive/SIM_CAMPAIGN_PLAN.md` §3
 task P0.1.
 
 Every simulated gas in this repo was wrong in two independent ways until
@@ -114,7 +114,7 @@ first runs. Specifically:
   vs −10 % in density, 2.4 % vs 13 % in composition). In the event it
   barely moved — 13 % → (12 ± 3) % — because the gas-dependent part of the
   rate is only ~10 % of the total to begin with.
-- The **benchmarks** in `BENCHMARKS.md` are unaffected in any way that
+- The **benchmarks** in `../archive/BENCHMARKS.md` are unaffected in any way that
   matters: runtime is dominated by geometry navigation, and a 7 % density
   change moves the interaction rate, not the cost per event.
 

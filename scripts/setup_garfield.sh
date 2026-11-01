@@ -114,7 +114,7 @@ if [ "$_mode" = "build" ]; then
         source "$P2_LCG_VIEW/setup.sh"
     else
         echo "!!  No LCG view; relying on whatever ROOT/cmake are already set up."
-        # conda env (docs/LOCAL_SETUP.md): its libraries before the system's
+        # conda env (docs/SETUP.md): its libraries before the system's
         [ -n "$CONDA_PREFIX" ] && export CMAKE_PREFIX_PATH="$CONDA_PREFIX${CMAKE_PREFIX_PATH:+:$CMAKE_PREFIX_PATH}"
     fi
     mkdir -p "$(dirname "$_src")"
@@ -135,7 +135,9 @@ if [ "$_mode" = "build" ]; then
     done
     cmake -S "$_src" -B "$_src/../build" -DCMAKE_INSTALL_PREFIX="$_inst" \
           -DCMAKE_BUILD_TYPE=Release
-    cmake --build "$_src/../build" -j"$(nproc)"
+    # at most 8 jobs by default: often run on a shared login node
+    _j=$(nproc); [ "$_j" -gt 8 ] && _j=8
+    cmake --build "$_src/../build" -j"${P2_BUILD_JOBS:-$_j}"
     cmake --install "$_src/../build"
     echo ""
     echo "==> Done. Now:  source scripts/setup_garfield.sh"

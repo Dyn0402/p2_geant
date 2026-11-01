@@ -30,6 +30,7 @@ source "$P2_LCG_VIEW/setup.sh"
 
 _p2_here="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 export P2_REPO="$_p2_here"
+export P2_SETUP="$_p2_here/scripts/setup_feynman.sh"   # sourced by batch/local job wrappers
 export P2_WORK="${P2_WORK:-$HOME/p2}"
 export P2_DATA="${P2_DATA:-$P2_WORK/data}"
 export P2_GARFIELD_SRC="${P2_GARFIELD_SRC:-$P2_WORK/garfield/src}"

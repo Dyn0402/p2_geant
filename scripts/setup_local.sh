@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 # setup_local.sh — environment for running the P2 chain on your own machine
 # (no CERN account, no CVMFS/EOS/HTCondor). The lxplus counterpart is
-# setup_lxplus.sh. Full instructions: docs/LOCAL_SETUP.md.
+# setup_lxplus.sh. Full instructions: docs/SETUP.md.
 #
 #   conda activate p2sim                 # from environment.yml
 #   source scripts/setup_local.sh
@@ -17,6 +17,7 @@
 
 _p2_here="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 export P2_REPO="$_p2_here"
+export P2_SETUP="$_p2_here/scripts/setup_local.sh"     # sourced by local job wrappers
 export P2_DATA="${P2_DATA:-$HOME/p2_data}"
 
 _p2_ok=1
@@ -52,7 +53,7 @@ else
     echo "[setup_local]   bash scripts/setup_garfield.sh --build      (~15 min, once)"
 fi
 
-[ -d "$P2_DATA" ] || echo "[setup_local] P2_DATA=$P2_DATA does not exist yet: see docs/LOCAL_SETUP.md, 'Data'."
+[ -d "$P2_DATA" ] || echo "[setup_local] P2_DATA=$P2_DATA does not exist yet: see docs/SETUP.md §3."
 
 echo "[setup_local] Geant4 $(geant4-config --version)  ROOT $(root-config --version)"
 echo "[setup_local] P2_DATA=$P2_DATA"

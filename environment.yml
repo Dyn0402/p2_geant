@@ -6,7 +6,7 @@
 #
 # Production on lxplus used Geant4 11.2.1 + ROOT 6.32 (LCG_106).
 # conda-forge has 11.2.2 (a bug-fix release of the same series), which is
-# checked against the lxplus reference in docs/LOCAL_SETUP.md, section "Check".
+# checked against the lxplus reference in docs/SETUP.md §4.
 name: p2sim
 channels:
   - conda-forge

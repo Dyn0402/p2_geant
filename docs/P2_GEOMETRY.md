@@ -276,7 +276,7 @@ number of pads — but it has not been confirmed on a quiet machine.
 
 Everything else in the stack — drift gap, mesh, amplification gap, drift
 cathode, entrance window — is **not** in the gerbers. See open questions in
-`docs/HANDOFF.md`.
+`docs/archive/HANDOFF.md`.
 
 ---
 

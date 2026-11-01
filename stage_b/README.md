@@ -46,7 +46,7 @@ ClusterTree (Stage A)
 
 The pad multiplicity is the interesting one. **~1.1 pads/hit was previously
 derived from a separate geometric analysis** (`vmm/nl_map.py`,
-`SIM_CAMPAIGN_PLAN.md` §2); the full Geant4 → transport → pad chain now
+`../docs/archive/SIM_CAMPAIGN_PLAN.md` §2); the full Geant4 → transport → pad chain now
 reproduces it independently. That figure is what the "neighbour logic off"
 baseline rests on, so having two independent routes to it matters.
 

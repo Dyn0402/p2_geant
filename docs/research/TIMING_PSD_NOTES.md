@@ -2,8 +2,8 @@
 
 **Written:** 2026-08-05 (Dylan: "extremely interesting angle — explore the
 possibilities"). Status: **ideas + study plan, nothing simulated yet.**
-Companion docs: `../SIM_CAMPAIGN_PLAN.md` §5 step 6 (campaign hook),
-`../TESTBEAM_PLAN.md` §2 (data-side asks), `../../vmm/README.md` (emulator
+Companion docs: `../archive/SIM_CAMPAIGN_PLAN.md` §5 step 6 (campaign hook),
+`../archive/TESTBEAM_PLAN.md` §2 (data-side asks), `../../vmm/README.md` (emulator
 that runs these studies), **`TIME_RESOLUTION_NOTES.md` (2026-08-06 — how
 *well* we can time a hit, as opposed to this document's question of what the
 time structure can *discriminate*; the two share a tool and a physics
@@ -71,7 +71,7 @@ photon-acceptance at fixed ε_e drops. Costs and caveats:
    The electron signal is simultaneously *suppressed* ×3–4, so S/N may
    collapse — this is the make-or-break number, and it is measurable on
    the bench (pedestal σ vs t_p at real pad capacitance; already asked for
-   in `TESTBEAM_PLAN.md` §2.1).
+   in `../archive/TESTBEAM_PLAN.md` §2.1).
 2. The VMM3a **ion-tail suppression** stages (mild/strong) and the ~150 ns
    ion-tail ballistic deficit (Athena s_bd factor) modify the arithmetic;
    the T1 emulator has the machinery to compute this exactly.
@@ -106,7 +106,7 @@ uniform over the full drift window. Consequences:
   even after the coincidence.
 
 **Study**: track-TDO pdf from Stage B + T1 per gas; validated against the
-SPS muon TDO distributions (`TESTBEAM_PLAN.md` §2.6). **Partly done
+SPS muon TDO distributions (`../archive/TESTBEAM_PLAN.md` §2.6). **Partly done
 2026-08-06**: the track-side TDO width is now predicted —
 σ_t ≈ 12 ns (Ar mixes) to 25 ns (Ne/CO₂/Iso), walk-corrected
 (`TIME_RESOLUTION_NOTES.md`). This is the *floor* on the coincidence
@@ -160,7 +160,7 @@ before proposing; the efficiency cost lives entirely on the shape layer.
 2. **SPS muon data**: TDO distributions (drift-model check, handle 3) and
    PDO spectra at whatever t_p settings were run — if the campaign
    happened to include more than one peaking time, that is ballistic-
-   deficit data for free (`TESTBEAM_PLAN.md` §2.9).
+   deficit data for free (`../archive/TESTBEAM_PLAN.md` §2.9).
 3. If both confirm the model, the emulator's t_p×window optimization can
    be trusted enough to propose operating settings (and possibly the
    heterogeneous-layer scheme) to BASKET with numbers attached.

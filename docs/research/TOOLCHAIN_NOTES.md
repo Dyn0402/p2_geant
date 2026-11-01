@@ -1,7 +1,7 @@
 # Research notes — Geant4 ↔ Garfield++ ↔ VMM simulation chain
 
 **Compiled 2026-08-05** (web research pass for the campaign plan; summarized
-into `../SIM_CAMPAIGN_PLAN.md` §2 — this file keeps the full detail and
+into `../archive/SIM_CAMPAIGN_PLAN.md` §2 — this file keeps the full detail and
 citations). Unverified items flagged inline.
 
 ---

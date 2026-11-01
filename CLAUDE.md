@@ -54,9 +54,10 @@ people and to AI assistants working in this repo.
 
 ## Practicalities
 
-- Local setup (no CERN account): `docs/LOCAL_SETUP.md`. `$P2_DATA` stands in for
-  `/eos/user/a/akallits/p2_sim` in every path. Use `submit_condor_p2.py --local` instead of
-  HTCondor. Before trusting a new machine, run the checks in its §4.
+- Setup (Feynman or laptop, no CERN account): `docs/SETUP.md`. `$P2_DATA` stands in for
+  `/eos/user/a/akallits/p2_sim` in every path. Use `submit_condor_p2.py --slurm` (Feynman) or
+  `--local N` (laptop) instead of HTCondor. Before trusting a new machine, run the checks in
+  its §4.
 - Production runs come from a clean git checkout, so that RunMeta records the commit.
 - Compiled Garfield programs only; ROOT 6.38 cling cannot JIT them.
 - Don't edit or pull sources that queued HTCondor jobs recompile from.

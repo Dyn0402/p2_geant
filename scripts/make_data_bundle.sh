@@ -11,7 +11,7 @@
 # Output: $OUT (default /eos/user/a/akallits/p2_sim/handover_bundle), one
 # .tar per item plus SHA256SUMS and MANIFEST.txt. Share that folder in CERNBox
 # ("Share" -> "Public link", read-only). Recipients extract every tarball into
-# $P2_DATA (docs/LOCAL_SETUP.md); paths inside are relative to p2_sim/, so
+# $P2_DATA (docs/SETUP.md); paths inside are relative to p2_sim/, so
 # /eos/user/a/akallits/p2_sim/X becomes $P2_DATA/X.
 set -euo pipefail
 

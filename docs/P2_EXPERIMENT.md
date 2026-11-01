@@ -109,7 +109,7 @@ map; confirm wheel z and local B with the collaboration.** ❌ not public.
 > So no B-field in this simulation — electrons arrive as straight tracks,
 > centrally at ~10° from the wedge normal, and the campaign scans the
 > incidence angle 0°–40° (and energy) to bracket the uncertainty.
-> See `SIM_CAMPAIGN_BRIEF.md` §2.
+> See `archive/SIM_CAMPAIGN_BRIEF.md` §2.
 
 - Primary particle: **electrons, ~119 MeV** (155 MeV beam baseline; 144 MeV
   for the 200 MeV option).

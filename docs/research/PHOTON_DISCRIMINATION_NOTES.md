@@ -17,7 +17,7 @@ superseded. Reproduce the analytic side with
 the script header, Klein-Nishina integrated numerically, Katz-Penfold
 electron ranges).
 
-Companion docs: `../SIM_CAMPAIGN_PLAN.md` (§0, §1, §4.2, §5 amended from
+Companion docs: `../archive/SIM_CAMPAIGN_PLAN.md` (§0, §1, §4.2, §5 amended from
 this note), `TIMING_PSD_NOTES.md` (the time-structure handle, which has the
 same blind spot identified in §4 below), `GAS_NOTES.md` (gas physics and
 procurement).

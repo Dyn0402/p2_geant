@@ -83,7 +83,7 @@ A review of the method raised five points; what each turned out to be:
    its thickness, is not measured. `docs/P2_MODEL.md` updated for the
    measured 50/68 µm mesh (Geant4 default still 45/63).
 4. *Voltages.* Mesh −450 V / drift 625 V/cm are assumed (the beam-test
-   voltages are still open in `docs/testbeam/TB_CONDITIONS.md`), and all gases
+   voltages are still open in `docs/archive/testbeam/TB_CONDITIONS.md`), and all gases
    are compared at the same voltages, not at equal gain. Read the sweep at the
    field ratio of the real operating point.
 5. *Wording.* Stage B still uses transparency 1.0; the 2 mm/4 mm agreement is

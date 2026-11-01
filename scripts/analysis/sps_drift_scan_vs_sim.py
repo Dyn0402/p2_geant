@@ -29,8 +29,10 @@ REPO = pathlib.Path(__file__).resolve().parents[2]
 RUN = "drift_mesh_scan_1"
 SIM_GAS = "ArCO2Iso9352"   # from the corrected run_config: Ar/CO2/Iso 93/5/2
 GAS_LABEL = "Ar/CO2/iso 93/5/2"
-DATA = pathlib.Path("/local/home/ak271430/Documents/PostDocSaclay/data/SPS_Beam_Test/"
-                    "mpgd26_workspace/products/analysis")
+import sys as _sys
+_sys.path.insert(0, str(pathlib.Path(__file__).resolve().parent))
+import p2paths  # noqa: E402  (data locations: $P2_DATA, docs/SETUP.md §3)
+DATA = p2paths.sps_products()
 OUT = REPO / "docs" / "results" / "mesh"
 
 

@@ -35,8 +35,10 @@ import numpy as np
 from scipy.optimize import minimize_scalar
 
 REPO = pathlib.Path(__file__).resolve().parents[2]
-DATA = pathlib.Path("/local/home/ak271430/Documents/PostDocSaclay/data/SPS_Beam_Test/"
-                    "mpgd26_workspace/products/analysis")
+import sys as _sys
+_sys.path.insert(0, str(pathlib.Path(__file__).resolve().parent))
+import p2paths  # noqa: E402  (data locations: $P2_DATA, docs/SETUP.md §3)
+DATA = p2paths.sps_products()
 OUT = REPO / "docs" / "results" / "contamination"
 D_CM = 0.3964
 TP_NS = 180.0

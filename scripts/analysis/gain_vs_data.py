@@ -25,11 +25,13 @@ REPO = pathlib.Path(__file__).resolve().parents[2]
 OUT = REPO / "docs" / "results" / "gain"
 E_PER_ADC = 6241.5 / 18.0
 COLL = (0.46, 0.6, 0.76)   # ion-charge fraction at the 180 ns peak: low, central, high
-SPS = pathlib.Path("/local/home/ak271430/Documents/PostDocSaclay/data/SPS_Beam_Test/mpgd26_workspace/"
-                   "products/analysis/P2_OUT/beam_nominal_meshscan_1/scan/20_beam_spectra/"
-                   "beam_mpv_vs_hv_spark_vetoed.csv")
-FE55 = pathlib.Path("/local/home/ak271430/Documents/PostDocSaclay/data/Cosmic_Bench/Analysis/det2/"
-                    "p2_fe55_det2_det3_mesh_scan_7-18-26/fe55_scan/18_fe55_spectra/fe55_gain_vs_hv_spark_vetoed.csv")
+import sys as _sys
+_sys.path.insert(0, str(pathlib.Path(__file__).resolve().parent))
+import p2paths  # noqa: E402  (data locations: $P2_DATA, docs/SETUP.md §3)
+SPS = (p2paths.sps_products() / "P2_OUT/beam_nominal_meshscan_1/scan/20_beam_spectra/"
+       "beam_mpv_vs_hv_spark_vetoed.csv")
+FE55 = (p2paths.cosmic_products() / "det2/p2_fe55_det2_det3_mesh_scan_7-18-26/fe55_scan/"
+        "18_fe55_spectra/fe55_gain_vs_hv_spark_vetoed.csv")
 
 
 def sim():

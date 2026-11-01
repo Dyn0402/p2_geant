@@ -4,7 +4,7 @@
 a *pad* detector; time resolution promoted to a first-class deliverable).
 Status: **model implemented and unit-tested; not yet connected to Stage B
 (which doesn't exist yet) — no physics run.**
-Campaign context: `../docs/SIM_CAMPAIGN_PLAN.md` §2 (chain architecture),
+Campaign context: `../docs/archive/SIM_CAMPAIGN_PLAN.md` §2 (chain architecture),
 §5 (ADC discrimination study). Toolchain citations:
 `../docs/research/TOOLCHAIN_NOTES.md` §6. Timing study:
 `../docs/research/TIME_RESOLUTION_NOTES.md`.

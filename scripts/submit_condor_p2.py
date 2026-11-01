@@ -33,10 +33,10 @@ Usage:
     python3 scripts/submit_condor_p2.py --scan rnd2026 --outdir /eos/user/a/akallits/p2_sim/rnd2026_heed
         (--physics heed is the default since 2026-10-16; --physics legacy = old)
 
-On a SLURM cluster (Feynman, docs/FEYNMAN.md): --slurm submits the same jobs
+On a SLURM cluster (Feynman, docs/SETUP.md §1): --slurm submits the same jobs
 as one SLURM array (scripts/slurm_array.sh); default setup setup_feynman.sh.
 
-Without HTCondor (your own machine, docs/LOCAL_SETUP.md): --local N runs the
+Without HTCondor (your own machine, docs/SETUP.md): --local N runs the
 same jobs, with the same wrapper and manifest, on N local processes.
 --only and --scale pick a subset and shrink it to laptop size:
     python3 scripts/submit_condor_p2.py --scan rnd2026 --local 4 \
@@ -424,9 +424,13 @@ def main():
     if not exe:
         sys.exit("ERROR: mm_sim not found. Build it, or pass --exe.")
 
-    default_setup = ("setup_local.sh" if args.local else
-                     "setup_feynman.sh" if args.slurm else "setup_lxplus.sh")
-    setup = args.setup or str((Path(__file__).parent / default_setup).resolve())
+    # The setup script the user sourced (setup_feynman/setup_local export
+    # P2_SETUP), else the usual one for the batch system.
+    default_setup = os.environ.get("P2_SETUP") or str(
+        Path(__file__).parent / ("setup_local.sh" if args.local else
+                                 "setup_feynman.sh" if args.slurm else
+                                 "setup_lxplus.sh"))
+    setup = args.setup or str(Path(default_setup).resolve())
     if not Path(setup).is_file():
         sys.exit(f"ERROR: setup script not found: {setup}")
 

@@ -6,7 +6,7 @@ physics as the lxplus production file of the same run point?
 
 Compares RunMeta (physics switches, geometry hash) and the drift-gas primary
 count nPrimDrift as a full distribution: mean, median, P(n<10), P(n<5) and a
-two-sample KS test. Used in docs/LOCAL_SETUP.md, section 4. Exit code 1 if the
+two-sample KS test. Used in docs/SETUP.md §4. Exit code 1 if the
 geometry or physics settings differ or the KS p-value is below 0.01.
 """
 import sys

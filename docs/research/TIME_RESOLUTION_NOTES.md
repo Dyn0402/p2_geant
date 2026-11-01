@@ -7,7 +7,7 @@ with simulation … let's do some work to determine what we expect").
 predictions, not yet anchored to any measurement.**
 Tool: `vmm/time_resolution.py` (standalone, no Geant4, no Stage B, ~1 min per
 configuration). Companion docs: `TIMING_PSD_NOTES.md` (timing as a
-*discriminant*, a different question), `../TESTBEAM_PLAN.md` §2.6 (the data
+*discriminant*, a different question), `../archive/TESTBEAM_PLAN.md` §2.6 (the data
 side), `../../vmm/README.md` (the emulator).
 
 ---
@@ -61,7 +61,7 @@ time.
 The VMM streams one timestamp per channel — either the **threshold-crossing
 time** or the **time at the peak**, a per-chip configuration. The two have
 different physics and different systematics, and the test-beam configuration
-must be recorded (`testbeam/TB_CONDITIONS.md` T0.4):
+must be recorded (`../archive/testbeam/TB_CONDITIONS.md` T0.4):
 
 | | threshold crossing | time at peak |
 |---|---|---|
@@ -145,7 +145,7 @@ correction will show a spurious threshold dependence.
 **Gas.** Timing follows 1/(n_p·v_d) — the same quantity that drives the
 zero-cluster inefficiency floor (n_p) and the drift span (v_d). Argon
 mixtures win on timing by ~2× over the slow neon ternary, which is *another*
-entry on the argon side of the gas ledger (`SIM_CAMPAIGN_PLAN.md` §7.4).
+entry on the argon side of the gas ledger (`../archive/SIM_CAMPAIGN_PLAN.md` §7.4).
 Ne/CO₂/iC₄H₁₀ 95/3/2 is the worst case in this table on both counts.
 
 **Gap.** Not scanned yet (§6). Expect σ ∝ roughly constant in the first
@@ -171,7 +171,7 @@ Known limitations, in order of how much they could move the answer:
    timing is optimistic.
 
    **This is much cheaper to fix than "Phase 4" implies** *(MX17 review,
-   2026-08-06 — `../HANDOFF_MX17_RESPONSE.md` §2.1)*. MX17 needs a
+   2026-08-06 — `../archive/HANDOFF_MX17_RESPONSE.md` §2.1)*. MX17 needs a
    semi-spectral quasi-static solver because its stack is **resistive**;
    P2's is not, and for a non-resistive N-layer stack the weighting
    potential is **static** — no time dependence, no FEM. Riegler's
@@ -190,7 +190,7 @@ Known limitations, in order of how much they could move the answer:
    retires `MM_ION_FLOW_TIME_NS = 150.0` in `vmm/vmm_shaper.py`: that is
    ATLAS NSW's gap and gas encoded as a ballistic-deficit constant, and
    P2's differ. **Drop it once real induction exists rather than retuning
-   it.** Re-filed as **P0.17** (was `SIM_CAMPAIGN_PLAN.md` §8).
+   it.** Re-filed as **P0.17** (was `../archive/SIM_CAMPAIGN_PLAN.md` §8).
 2. **v_d and σ_L are placeholders** (the drift times quoted in the campaign
    docs: 60–75 ns for Ar mixes, ~110 ns for Ne/CO₂ over 3 mm). Since
    σ_t ∝ 1/v_d, a 20 % error in drift velocity is a 20 % error in the
@@ -201,7 +201,7 @@ Known limitations, in order of how much they could move the answer:
    experience is that **water contamination dominates drift velocity** in
    real gas systems — they measure 36.6 µm/ns against a far higher dry
    Magboltz prediction in Ar/iso, and infer 1–2 % H₂O at the SPS
-   (`../HANDOFF_MX17_RESPONSE.md` §2.4). Since our prediction scales as
+   (`../archive/HANDOFF_MX17_RESPONSE.md` §2.4). Since our prediction scales as
    1/v_d, a dry table could be optimistic by tens of percent against the
    very SPS data we are trying to match. P0.10 now generates **wet variants
    (0.5/1/2 % H₂O) alongside dry**; quote the bracket, and expect the bench
@@ -212,7 +212,7 @@ Known limitations, in order of how much they could move the answer:
    per-channel threshold-trim spread (a fixed offset, calibrated out in data
    but a *systematic* if uncorrected: 5-bit trim on a ~10-bit global DAC).
 5. Single pad, normal incidence. Inclined tracks (10–40°, radius-dependent
-   per `NEEDED_INPUTS.md` §2) lengthen the path — more clusters, so slightly
+   per `../archive/NEEDED_INPUTS.md` §2) lengthen the path — more clusters, so slightly
    *better* timing — and spread charge over more pads, where the earliest
    pad time is the natural estimator. Not yet studied.
 6. No δ-rays or Landau tail from Geant4 — the cluster-size tail is the
@@ -220,7 +220,7 @@ Known limitations, in order of how much they could move the answer:
 
 ## 5. What we need from the SPS data (asks)
 
-Added to `TESTBEAM_PLAN.md` §2.6 and `testbeam/TB_CONDITIONS.md` T0.4/T0.5:
+Added to `../archive/TESTBEAM_PLAN.md` §2.6 and `../archive/testbeam/TB_CONDITIONS.md` T0.4/T0.5:
 
 1. **TDO mode**: threshold-crossing or time-at-peak? (per-chip setting)
 2. **TAC ramp** (60/100/350/650 ns) and the **BC clock frequency**, plus the
@@ -251,11 +251,11 @@ Added to `TESTBEAM_PLAN.md` §2.6 and `testbeam/TB_CONDITIONS.md` T0.4/T0.5:
    weighting potential. Retires the borrowed `MM_ION_FLOW_TIME_NS` constant
    and is what makes the time-at-peak prediction quotable. *(Afternoon.)*
 3. Add **σ_t as a cell value in the Phase-3 (gap × gas) matrix**
-   (`SIM_CAMPAIGN_PLAN.md` §6) — the machinery is a drop-in.
+   (`../archive/SIM_CAMPAIGN_PLAN.md` §6) — the machinery is a drop-in.
 4. Angle scan (0–40°) and the **multi-pad case**: which estimator (earliest
    pad, charge-weighted) is best when 1.1 pads becomes 2+ at large angle.
 5. Feed the σ_t prediction into the **3-layer coincidence window** arithmetic
-   (`SIM_CAMPAIGN_PLAN.md` §5 step 5 and `TIMING_PSD_NOTES.md` §4): the
+   (`../archive/SIM_CAMPAIGN_PLAN.md` §5 step 5 and `TIMING_PSD_NOTES.md` §4): the
    window cannot be narrower than a few σ_t, which sets an accidental-rate
    floor. With σ_t ≈ 12 ns (Ar) vs 25 ns (Ne/CO₂ ternary), the achievable
    window differs by 2× and the accidental rate by 4× — this may matter more

@@ -1,7 +1,7 @@
 # Research notes — neon-based gas mixtures for the P2 Micromegas
 
 **Compiled 2026-08-05** (web research pass for the campaign plan; summarized
-into `../SIM_CAMPAIGN_PLAN.md` §7 — this file keeps the full detail and
+into `../archive/SIM_CAMPAIGN_PLAN.md` §7 — this file keeps the full detail and
 citations). Unverified items flagged inline.
 
 ---

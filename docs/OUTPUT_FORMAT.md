@@ -1,7 +1,7 @@
 # Simulation output format (p2 mode)
 
 **Written:** 2026-08-05, after the provenance/scoring rework. Supersedes the
-output section of `MX17_README.md` for `p2` mode; the inherited MX17 modes
+output section of `archive/MX17_README.md` for `p2` mode; the inherited MX17 modes
 still write what they always did, plus the new generic per-volume scoring.
 
 Each worker thread writes `<out>_t<N>.root` with four trees (or, without

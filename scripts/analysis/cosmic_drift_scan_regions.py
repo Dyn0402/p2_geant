@@ -32,7 +32,11 @@ import matplotlib.pyplot as plt
 import numpy as np
 import pandas as pd
 
-COSMIC = "/local/home/ak271430/Documents/PostDocSaclay/P2_basket_analysis/cosmic_bench_analysis"
+import pathlib as _pl
+_sys_path0 = str(_pl.Path(__file__).resolve().parent)
+sys.path.insert(0, _sys_path0)
+import p2paths  # noqa: E402
+COSMIC = str(p2paths.basket_analysis() / "cosmic_bench_analysis")
 sys.path.insert(0, COSMIC)
 import p2_qa_config as qa  # noqa: E402
 qa.setup_paths()
