@@ -2,7 +2,11 @@
 
 Geant4 simulation of the P2 wedge Micromegas detector (MESA / Mainz).
 
-> **Read [`docs/HANDOFF.md`](docs/HANDOFF.md) first.**
+> **New here? Read [`docs/HANDOVER.md`](docs/HANDOVER.md) (current state,
+> open problems, to-do list, 2026-11-01) and [`CLAUDE.md`](CLAUDE.md)
+> (working rules) first.** The updates below and `docs/HANDOFF.md` date from
+> August 2026 and are kept for history; some of their numbers are superseded
+> (e.g. the drift gap is 4 mm, the stack has been rebuilt from the design files).
 >
 > **Running it on lxplus: [`docs/RUNBOOK.md`](docs/RUNBOOK.md)** — including
 > what is *not* yet runnable (Stage B does not exist, there is no pillar

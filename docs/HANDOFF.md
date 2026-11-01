@@ -1,3 +1,6 @@
+> **Superseded (2026-11-01):** this is the August 2026 handoff, kept for history.
+> For the current state read [`HANDOVER.md`](HANDOVER.md).
+
 # Handoff — P2 wedge Geant4 simulation
 
 **Written:** 2026-08-05
