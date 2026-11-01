@@ -13,6 +13,10 @@
 # ("Share" -> "Public link", read-only). Recipients extract every tarball into
 # $P2_DATA (docs/SETUP.md); paths inside are relative to p2_sim/, so
 # /eos/user/a/akallits/p2_sim/X becomes $P2_DATA/X.
+#
+# The SPS/cosmic data products are not on EOS: make sps_products.tar on the
+# laptop with scripts/make_sps_products_bundle.py and copy it into $OUT before
+# running this (SHA256SUMS then covers it too).
 set -euo pipefail
 
 SRC="${SRC:-/eos/user/a/akallits/p2_sim}"

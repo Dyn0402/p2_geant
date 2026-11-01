@@ -17,12 +17,18 @@ p2_garfield_env() {
             if [ -d "$_c/include/Garfield" ]; then P2_GARFIELD_INSTALL="$_c"; break; fi
         done
     fi
-    export P2_GARFIELD_INSTALL
-    source "$here/scripts/setup_garfield.sh"
-    if [ -z "$GARFIELD_INSTALL" ] || [ ! -d "$GARFIELD_INSTALL/include/Garfield" ]; then
-        echo "No Garfield++ install found. Build it: bash scripts/setup_garfield.sh --build" >&2
+    # Only the pinned, patched build is acceptable here. Never fall back to a
+    # GARFIELD_INSTALL inherited from the environment (setup_feynman.sh sets it
+    # to the LCG Garfield for mm_sim, which lacks the interface-crossing fix
+    # and would give wrong transparencies without any error).
+    if [ -z "$P2_GARFIELD_INSTALL" ] || [ ! -d "$P2_GARFIELD_INSTALL/include/Garfield" ]; then
+        echo "Pinned Garfield++ not found (P2_GARFIELD_INSTALL='$P2_GARFIELD_INSTALL')." >&2
+        echo "Build it: bash scripts/setup_garfield.sh --build, or set P2_GARFIELD_INSTALL." >&2
         exit 1
     fi
+    export P2_GARFIELD_INSTALL
+    source "$here/scripts/setup_garfield.sh"
+    export GARFIELD_INSTALL="$P2_GARFIELD_INSTALL"
     _glib="$GARFIELD_INSTALL/lib64"
     [ -d "$_glib" ] || _glib="$GARFIELD_INSTALL/lib"
 }

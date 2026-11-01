@@ -2,7 +2,8 @@
 
 Written 2026-11-01 by Alexandra Kallitsopoulou (CEA Saclay) for the student taking over.
 State as of 2026-10-21. Read this first, then `SETUP.md` to get running and
-`../CLAUDE.md` for the working rules.
+`../CLAUDE.md` for the working rules. `HOWTO.md` has recipes for everyday tasks once you are
+set up, including setting up your own accounts and environment from nothing (§0).
 
 ## 1. The question
 

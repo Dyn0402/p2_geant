@@ -18,6 +18,7 @@ keeping ≲ 20 ns timing.
 1. [`docs/HANDOVER.md`](docs/HANDOVER.md): what the project is, where it stands, your first task.
 2. [`docs/SETUP.md`](docs/SETUP.md): install and run, on Feynman (CEA cluster) or your laptop. No CERN account needed.
 3. [`CLAUDE.md`](CLAUDE.md): the working rules. Read them before you produce a number.
+4. [`docs/HOWTO.md`](docs/HOWTO.md): recipes for everyday tasks (run a scan, a Garfield sweep, a gas table, compare with data, troubleshooting).
 
 ## Where things are
 
