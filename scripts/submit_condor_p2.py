@@ -33,6 +33,9 @@ Usage:
     python3 scripts/submit_condor_p2.py --scan rnd2026 --outdir /eos/user/a/akallits/p2_sim/rnd2026_heed
         (--physics heed is the default since 2026-10-16; --physics legacy = old)
 
+On a SLURM cluster (Feynman, docs/FEYNMAN.md): --slurm submits the same jobs
+as one SLURM array (scripts/slurm_array.sh); default setup setup_feynman.sh.
+
 Without HTCondor (your own machine, docs/LOCAL_SETUP.md): --local N runs the
 same jobs, with the same wrapper and manifest, on N local processes.
 --only and --scale pick a subset and shrink it to laptop size:
@@ -46,6 +49,7 @@ import csv
 import time
 import json
 import os
+import shlex
 import random
 import stat
 import subprocess
@@ -164,6 +168,11 @@ def parse_args():
     p.add_argument("--local", type=int, metavar="N", default=0,
                    help="Run the jobs here on N parallel processes instead of "
                         "submitting to HTCondor (default setup: setup_local.sh)")
+    p.add_argument("--slurm", action="store_true",
+                   help="Submit as a SLURM array (Feynman) instead of HTCondor")
+    p.add_argument("--partition", default="htc", help="SLURM partition (--slurm)")
+    p.add_argument("--max-running", type=int, default=200,
+                   help="SLURM array throttle: jobs running at once (--slurm)")
     p.add_argument("--only", nargs="+", default=None, metavar="SUBSTR",
                    help="Keep only jobs whose tag contains one of these strings")
     p.add_argument("--scale", type=float, default=1.0,
@@ -415,7 +424,8 @@ def main():
     if not exe:
         sys.exit("ERROR: mm_sim not found. Build it, or pass --exe.")
 
-    default_setup = "setup_local.sh" if args.local else "setup_lxplus.sh"
+    default_setup = ("setup_local.sh" if args.local else
+                     "setup_feynman.sh" if args.slurm else "setup_lxplus.sh")
     setup = args.setup or str((Path(__file__).parent / default_setup).resolve())
     if not Path(setup).is_file():
         sys.exit(f"ERROR: setup script not found: {setup}")
@@ -465,6 +475,8 @@ def main():
     print(f"  Submit file  : {submit_file}")
     print(f"  Manifest     : {manifest}")
 
+    if args.dry_run and args.slurm:
+        submit_slurm(rows, wrapper, job_dir, args)
     if args.dry_run:
         print("\n  --dry-run: not submitting. First few jobs:")
         for r in rows[:10]:
@@ -478,8 +490,40 @@ def main():
         print(f"\n  Then:  python3 scripts/collect_results.py --indir {outdir}")
         return
 
+    if args.slurm:
+        submit_slurm(rows, wrapper, job_dir, args)
+        print(f"\n  Then:  python3 scripts/collect_results.py --indir {outdir}")
+        return
+
     subprocess.run(["condor_submit", str(submit_file)], check=True)
     print(f"\n  Submitted. Then:  python3 scripts/collect_results.py --indir {outdir}")
+
+
+def job_argv(r, wrapper, spread):
+    return [str(wrapper), r["gas"], r["particle"], f"{r['energy_MeV']:.10g}",
+            str(r["nevents"]), r["outfile"], str(r["seed"]),
+            f"{r['drift_gap_mm']:g}", f"{r['theta_deg']:g}", f"{spread:g}",
+            str(r["skip_empty"])]
+
+
+def submit_slurm(rows, wrapper, job_dir, args):
+    """HTCondor stand-in on SLURM: one array task per manifest row."""
+    log_dir = job_dir / "logs"
+    log_dir.mkdir(exist_ok=True, parents=True)
+    cmds = job_dir / "slurm_cmds.txt"
+    cmds.write_text("".join(
+        " ".join(shlex.quote(a) for a in job_argv(r, wrapper, args.beam_spread))
+        + f" > {shlex.quote(str(log_dir / (r['tag'] + '.out')))} 2>&1\n"
+        for r in rows))
+    array = Path(__file__).parent / "slurm_array.sh"
+    cmd = ["sbatch", f"--array=1-{len(rows)}%{args.max_running}",
+           "-p", args.partition, "-o", str(log_dir / "slurm_%A_%a.out"),
+           str(array), str(cmds)]
+    print("  " + " ".join(cmd))
+    if args.dry_run:
+        return
+    subprocess.run(cmd, check=True)
+    print(f"  Watch: squeue -u $USER   Logs: {log_dir}/<tag>.out")
 
 
 def run_local(rows, wrapper, job_dir, workers, spread):
@@ -488,10 +532,7 @@ def run_local(rows, wrapper, job_dir, workers, spread):
     log_dir.mkdir(exist_ok=True, parents=True)
 
     def one(r):
-        argv = [str(wrapper), r["gas"], r["particle"], f"{r['energy_MeV']:.10g}",
-                str(r["nevents"]), r["outfile"], str(r["seed"]),
-                f"{r['drift_gap_mm']:g}", f"{r['theta_deg']:g}", f"{spread:g}",
-                str(r["skip_empty"])]
+        argv = job_argv(r, wrapper, spread)
         t0 = time.time()
         with open(log_dir / f"{r['tag']}.out", "w") as out, \
              open(log_dir / f"{r['tag']}.err", "w") as err:
